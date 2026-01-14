@@ -200,7 +200,7 @@
 									"dependsOn": [],
 									"userProperties": [],
 									"typeProperties": {
-										"message": "pipeline failed",
+										"message": "this is sample pipeline failed",
 										"errorCode": "500"
 									}
 								}
