@@ -79,6 +79,7 @@
 							],
 							"storeSettings": {
 								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
 								"enablePartitionDiscovery": false
 							},
 							"formatSettings": {
@@ -100,7 +101,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@equals(activity('Get file Metadata').output.columnCount,14)",
+								"value": "@equals(activity('Get file Metadata').output.columnCount,13)",
 								"type": "Expression"
 							},
 							"ifFalseActivities": [
@@ -108,9 +109,7 @@
 									"name": "Fail2",
 									"type": "Fail",
 									"dependsOn": [],
-									"userProperties": [
-										{}
-									],
+									"userProperties": [],
 									"typeProperties": {
 										"message": "pipeline failed",
 										"errorCode": "500"
