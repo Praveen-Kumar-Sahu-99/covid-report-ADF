@@ -17,14 +17,14 @@
 		"ls_http_ecdc_data_death_cases_properties_typeProperties_url": {
 			"value": "https://github.com"
 		},
-		"tr_ingest_population_data_properties_typeProperties_scope": {
-			"value": "/subscriptions/c779884c-8177-4bd2-8251-157a109c2430/resourceGroups/covid-report-rg/providers/Microsoft.Storage/storageAccounts/covidreportd2sa"
-		},
 		"tr_ingest_hospital_admission_data_properties_pl_ecdc_deaths_data_parameters_sourceRelativeURL": {
 			"value": "cloudboxacademy/covid19/blob/main/ecdc_data/hospital_admissions.csv"
 		},
 		"tr_ingest_hospital_admission_data_properties_pl_ecdc_deaths_data_parameters_sinkFileName": {
 			"value": "hospital_admissions.csv"
+		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"value": "/subscriptions/c779884c-8177-4bd2-8251-157a109c2430/resourceGroups/covid-report-rg/providers/Microsoft.Storage/storageAccounts/covidreportd2sa"
 		},
 		"containerUri": {
 			"value": ""
