@@ -101,11 +101,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"relativeURL": {
-											"value": "@pipeline().parameters.sourceRelativeURL",
+											"value": "@item().sourceRelativeURL",
 											"type": "Expression"
 										},
 										"baseURL": {
-											"value": "@pipeline().parameters.sourcebaseURL",
+											"value": "@item().sourceBaseURL",
 											"type": "Expression"
 										}
 									}
@@ -117,7 +117,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"fileName": {
-											"value": "@pipeline().parameters.sinkFileName",
+											"value": "@item().sinkFileName\r\n",
 											"type": "Expression"
 										}
 									}
@@ -128,17 +128,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"sourceRelativeURL": {
-				"type": "string"
-			},
-			"sinkFileName": {
-				"type": "string"
-			},
-			"sourcebaseURL": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
