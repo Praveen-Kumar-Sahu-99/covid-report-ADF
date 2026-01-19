@@ -19,6 +19,9 @@
 				},
 				{
 					"name": "selectonlyRequiredFileds"
+				},
+				{
+					"name": "PivotCounts"
 				}
 			],
 			"scriptLines": [
@@ -26,10 +29,10 @@
 				"          country as string,",
 				"          country_code as string,",
 				"          continent as string,",
-				"          population as string,",
+				"          population as integer,",
 				"          indicator as string,",
-				"          daily_count as string,",
-				"          date as string,",
+				"          daily_count as long,",
+				"          date as date,",
 				"          rate_14_day as string,",
 				"          source as string",
 				"     ),",
@@ -44,11 +47,20 @@
 				"          indicator,",
 				"          daily_count,",
 				"          source,",
-				"          each(match(name == 'date'),",
+				"          each(match(name=='date'),",
 				"               'reported'+'_date' = $$)",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> selectonlyRequiredFileds"
+				"     skipDuplicateMapOutputs: false) ~> selectonlyRequiredFileds",
+				"selectonlyRequiredFileds pivot(groupBy(country,",
+				"          country_code,",
+				"          population,",
+				"          source,",
+				"          reported_date),",
+				"     pivotBy(indicator, ['confirmed_cases', 'deaths']),",
+				"     count = sum(daily_count),",
+				"     columnNaming: '$V_$N',",
+				"     lateral: true) ~> PivotCounts"
 			]
 		}
 	}
