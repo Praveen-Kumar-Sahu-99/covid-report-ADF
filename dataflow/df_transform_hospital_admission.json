@@ -29,9 +29,6 @@
 				},
 				{
 					"name": "select1"
-				},
-				{
-					"name": "split1"
 				}
 			],
 			"scriptLines": [
@@ -84,9 +81,7 @@
 				"          population",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 split(ERROR_FUNCTION(''),",
-				"     disjoint: false) ~> split1@(, )"
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
