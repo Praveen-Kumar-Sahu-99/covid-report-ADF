@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText3",
+	"name": "ds_hospital_admission_weekly_dl_sink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls_covidreportdd2dl",

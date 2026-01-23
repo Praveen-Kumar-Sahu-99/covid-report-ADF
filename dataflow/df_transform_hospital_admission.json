@@ -29,14 +29,14 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText3",
+						"referenceName": "ds_hospital_admission_weekly_dl_sink",
 						"type": "DatasetReference"
 					},
 					"name": "WeeklySink"
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_hospital_admission_daily_dl_sin",
+						"referenceName": "ds_hospital_admission_daily_dl_sink",
 						"type": "DatasetReference"
 					},
 					"name": "DailySink"
