@@ -986,7 +986,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_processed_cases_and_deaths",
+								"referenceName": "ds_cases_deaths_dl_sink",
 								"type": "DatasetReference"
 							},
 							"name": "CasesAndDeathsSink",
@@ -1090,7 +1090,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_raw_cases_and_deaths')]",
 				"[concat(variables('factoryId'), '/datasets/ds_country_lookup')]",
-				"[concat(variables('factoryId'), '/datasets/ds_processed_cases_and_deaths')]",
+				"[concat(variables('factoryId'), '/datasets/ds_cases_deaths_dl_sink')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls_covidreportdd2dl')]"
 			]
 		},
