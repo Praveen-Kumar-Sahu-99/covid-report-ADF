@@ -11,8 +11,20 @@
 		"ls_adls_covidreportdd2dl_accountKey": {
 			"value": ""
 		},
+		"ls_hdi_covid_cluster_clusterPassword": {
+			"value": ""
+		},
+		"ls_hdi_covid_cluster_clusterSshPassword": {
+			"value": ""
+		},
 		"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 			"value": "https://covidreportd2dl.dfs.core.windows.net/"
+		},
+		"ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId": {
+			"value": "c779884c-8177-4bd2-8251-157a109c2430"
+		},
+		"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
+			"value": "covid-report-rg"
 		},
 		"ls_http_ecdc_data_death_cases_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseURL}"
