@@ -17,6 +17,12 @@
 		"ls_hdi_covid_cluster_clusterSshPassword": {
 			"value": ""
 		},
+		"test_hdi_clusterPassword": {
+			"value": ""
+		},
+		"test_hdi_clusterSshPassword": {
+			"value": ""
+		},
 		"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 			"value": "https://covidreportd2dl.dfs.core.windows.net/"
 		},
@@ -28,6 +34,12 @@
 		},
 		"ls_http_ecdc_data_death_cases_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseURL}"
+		},
+		"test_hdi_properties_typeProperties_hostSubscriptionId": {
+			"value": "c779884c-8177-4bd2-8251-157a109c2430"
+		},
+		"test_hdi_properties_typeProperties_clusterResourceGroup": {
+			"value": "covid-report-rg"
 		},
 		"tr_ingest_population_data_properties_typeProperties_scope": {
 			"value": "/subscriptions/c779884c-8177-4bd2-8251-157a109c2430/resourceGroups/covid-report-rg/providers/Microsoft.Storage/storageAccounts/covidreportd2sa"

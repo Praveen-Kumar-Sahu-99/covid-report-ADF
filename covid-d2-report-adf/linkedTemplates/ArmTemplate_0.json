@@ -23,6 +23,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'clusterSshPassword' of 'ls_hdi_covid_cluster'"
 		},
+		"test_hdi_clusterPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterPassword' of 'test_hdi'"
+		},
+		"test_hdi_clusterSshPassword": {
+			"type": "secureString",
+			"metadata": "Secure string for 'clusterSshPassword' of 'test_hdi'"
+		},
 		"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://covidreportd2dl.dfs.core.windows.net/"
@@ -36,6 +44,14 @@
 			"defaultValue": "c779884c-8177-4bd2-8251-157a109c2430"
 		},
 		"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
+			"type": "string",
+			"defaultValue": "covid-report-rg"
+		},
+		"test_hdi_properties_typeProperties_hostSubscriptionId": {
+			"type": "string",
+			"defaultValue": "c779884c-8177-4bd2-8251-157a109c2430"
+		},
+		"test_hdi_properties_typeProperties_clusterResourceGroup": {
 			"type": "string",
 			"defaultValue": "covid-report-rg"
 		}
@@ -686,6 +702,43 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/test_hdi')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsightOnDemand",
+				"typeProperties": {
+					"clusterType": "hadoop",
+					"clusterSize": 4,
+					"clusterNamePrefix": "",
+					"timeToLive": "00:15:00",
+					"version": "4.0",
+					"hostSubscriptionId": "[parameters('test_hdi_properties_typeProperties_hostSubscriptionId')]",
+					"clusterResourceGroup": "[parameters('test_hdi_properties_typeProperties_clusterResourceGroup')]",
+					"linkedServiceName": {
+						"referenceName": "ls_ablob_covidreportd2sa",
+						"type": "LinkedServiceReference"
+					},
+					"clusterPassword": {
+						"type": "SecureString",
+						"value": "[parameters('test_hdi_clusterPassword')]"
+					},
+					"clusterSshPassword": {
+						"type": "SecureString",
+						"value": "[parameters('test_hdi_clusterSshPassword')]"
+					},
+					"headNodeSize": "",
+					"dataNodeSize": "",
+					"zookeeperNodeSize": "",
+					"clusterResourceGroupAuthType": "SystemAssignedManagedIdentity"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_covidreportd2sa')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_ecdc_deaths_data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -827,207 +880,6 @@
 				"[concat(variables('factoryId'), '/datasets/ds_ecdc_file_list')]",
 				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_http')]",
 				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_dl')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_ingest_population_data')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "pipeline for population data",
-				"activities": [
-					{
-						"name": "Check if file exits",
-						"type": "Validation",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "ds_population_raw_gz",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"timeout": "0.00:02:00",
-							"sleep": 10,
-							"minimumSize": 1024
-						}
-					},
-					{
-						"name": "Get file Metadata",
-						"type": "GetMetadata",
-						"dependsOn": [
-							{
-								"activity": "Check if file exits",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.07:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "ds_population_raw_gz",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"fieldList": [
-								"columnCount",
-								"size",
-								"exists"
-							],
-							"storeSettings": {
-								"type": "AzureBlobStorageReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "DelimitedTextReadSettings"
-							}
-						}
-					},
-					{
-						"name": "If Column Count Matches",
-						"type": "IfCondition",
-						"dependsOn": [
-							{
-								"activity": "Get file Metadata",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@equals(activity('Get file Metadata').output.columnCount,13)",
-								"type": "Expression"
-							},
-							"ifFalseActivities": [
-								{
-									"name": "Fail2",
-									"type": "Fail",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"message": "this is sample pipeline failed",
-										"errorCode": "500"
-									}
-								}
-							],
-							"ifTrueActivities": [
-								{
-									"name": "Copy population data",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.00:10:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "DelimitedTextSource",
-											"storeSettings": {
-												"type": "AzureBlobStorageReadSettings",
-												"recursive": true,
-												"enablePartitionDiscovery": false
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
-											}
-										},
-										"sink": {
-											"type": "DelimitedTextSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "DelimitedTextWriteSettings",
-												"quoteAllText": true,
-												"fileExtension": ".txt"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_population_raw_gz",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "ds_population_raw_tsv",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									]
-								},
-								{
-									"name": "Delete1",
-									"type": "Delete",
-									"dependsOn": [
-										{
-											"activity": "Copy population data",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataset": {
-											"referenceName": "ds_population_raw_gz",
-											"type": "DatasetReference",
-											"parameters": {}
-										},
-										"enableLogging": false,
-										"storeSettings": {
-											"type": "AzureBlobStorageReadSettings",
-											"recursive": true,
-											"enablePartitionDiscovery": false
-										}
-									}
-								}
-							]
-						}
-					}
-				],
-				"concurrency": 1,
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_population_raw_gz')]",
-				"[concat(variables('factoryId'), '/datasets/ds_population_raw_tsv')]"
 			]
 		}
 	]
