@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/covid/transform"
+					"notebookPath": "/covid/transform/transform_population_data"
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_databricks_cluster",
