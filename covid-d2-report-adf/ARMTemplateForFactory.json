@@ -510,7 +510,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_process_population_data')]",
+			"name": "[concat(parameters('factoryName'), '/pl_process_population_data_databriks')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -546,7 +546,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_process_testing_data')]",
+			"name": "[concat(parameters('factoryName'), '/pl_process_testing_data_hdi')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
