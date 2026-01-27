@@ -163,6 +163,7 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
+							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
 									"referenceName": "ds_population_raw_gz",
