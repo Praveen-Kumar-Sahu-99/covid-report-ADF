@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_covidreportdd2dl'"
 		},
+		"ls_databricks_cluster_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_databricks_cluster'"
+		},
 		"ls_hdi_covid_cluster_clusterPassword": {
 			"type": "secureString",
 			"metadata": "Secure string for 'clusterPassword' of 'ls_hdi_covid_cluster'"
@@ -22,14 +26,6 @@
 		"ls_hdi_covid_cluster_clusterSshPassword": {
 			"type": "secureString",
 			"metadata": "Secure string for 'clusterSshPassword' of 'ls_hdi_covid_cluster'"
-		},
-		"test_hdi_clusterPassword": {
-			"type": "secureString",
-			"metadata": "Secure string for 'clusterPassword' of 'test_hdi'"
-		},
-		"test_hdi_clusterSshPassword": {
-			"type": "secureString",
-			"metadata": "Secure string for 'clusterSshPassword' of 'test_hdi'"
 		},
 		"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 			"type": "string",
@@ -44,14 +40,6 @@
 			"defaultValue": "c779884c-8177-4bd2-8251-157a109c2430"
 		},
 		"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
-			"type": "string",
-			"defaultValue": "covid-report-rg"
-		},
-		"test_hdi_properties_typeProperties_hostSubscriptionId": {
-			"type": "string",
-			"defaultValue": "c779884c-8177-4bd2-8251-157a109c2430"
-		},
-		"test_hdi_properties_typeProperties_clusterResourceGroup": {
 			"type": "string",
 			"defaultValue": "covid-report-rg"
 		}
@@ -91,6 +79,28 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_databricks_cluster')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-7405612527156588.8.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('ls_databricks_cluster_accessToken')]"
+					},
+					"newClusterNodeType": "Standard_DS3_v2",
+					"newClusterNumOfWorker": "1",
+					"newClusterVersion": "17.3.x-scala2.13",
+					"clusterOption": "Fixed",
+					"newClusterInitScripts": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_http_ecdc_data_death_cases')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -121,6 +131,42 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_process_population_data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "excute_population_transformation",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/covid/transform"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_databricks_cluster",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_databricks_cluster')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_cases_deaths_dl_sink')]",
@@ -699,187 +745,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_covidreportd2sa')]",
 				"[concat(variables('factoryId'), '/credentials/credential1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/test_hdi')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "HDInsightOnDemand",
-				"typeProperties": {
-					"clusterType": "hadoop",
-					"clusterSize": 4,
-					"clusterNamePrefix": "",
-					"timeToLive": "00:15:00",
-					"version": "4.0",
-					"hostSubscriptionId": "[parameters('test_hdi_properties_typeProperties_hostSubscriptionId')]",
-					"clusterResourceGroup": "[parameters('test_hdi_properties_typeProperties_clusterResourceGroup')]",
-					"linkedServiceName": {
-						"referenceName": "ls_ablob_covidreportd2sa",
-						"type": "LinkedServiceReference"
-					},
-					"clusterPassword": {
-						"type": "SecureString",
-						"value": "[parameters('test_hdi_clusterPassword')]"
-					},
-					"clusterSshPassword": {
-						"type": "SecureString",
-						"value": "[parameters('test_hdi_clusterSshPassword')]"
-					},
-					"headNodeSize": "",
-					"dataNodeSize": "",
-					"zookeeperNodeSize": "",
-					"clusterResourceGroupAuthType": "SystemAssignedManagedIdentity"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_covidreportd2sa')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_ecdc_deaths_data')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup ecdc file list",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "JsonSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "JsonReadSettings"
-								}
-							},
-							"dataset": {
-								"referenceName": "ds_ecdc_file_list",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Execute Copy for each record",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Lookup ecdc file list",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup ecdc file list').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ECDC Data",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "DelimitedTextSource",
-											"storeSettings": {
-												"type": "HttpReadSettings",
-												"requestMethod": "GET"
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
-											}
-										},
-										"sink": {
-											"type": "DelimitedTextSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "DelimitedTextWriteSettings",
-												"quoteAllText": true,
-												"fileExtension": ".txt"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_ecdc_raw_csv_http",
-											"type": "DatasetReference",
-											"parameters": {
-												"relativeURL": {
-													"value": "@item().sourceRelativeURL",
-													"type": "Expression"
-												},
-												"baseURL": {
-													"value": "@item().sourceBaseURL",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "ds_ecdc_raw_csv_dl",
-											"type": "DatasetReference",
-											"parameters": {
-												"fileName": {
-													"value": "@item().sinkFileName\r\n",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_ecdc_file_list')]",
-				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_http')]",
-				"[concat(variables('factoryId'), '/datasets/ds_ecdc_raw_csv_dl')]"
 			]
 		}
 	]

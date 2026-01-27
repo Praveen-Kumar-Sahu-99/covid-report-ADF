@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_covidreportdd2dl'"
 		},
+		"ls_databricks_cluster_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_databricks_cluster'"
+		},
 		"ls_hdi_covid_cluster_clusterPassword": {
 			"type": "secureString",
 			"metadata": "Secure string for 'clusterPassword' of 'ls_hdi_covid_cluster'"
@@ -92,17 +96,14 @@
 					"ls_adls_covidreportdd2dl_accountKey": {
 						"value": "[parameters('ls_adls_covidreportdd2dl_accountKey')]"
 					},
+					"ls_databricks_cluster_accessToken": {
+						"value": "[parameters('ls_databricks_cluster_accessToken')]"
+					},
 					"ls_hdi_covid_cluster_clusterPassword": {
 						"value": "[parameters('ls_hdi_covid_cluster_clusterPassword')]"
 					},
 					"ls_hdi_covid_cluster_clusterSshPassword": {
 						"value": "[parameters('ls_hdi_covid_cluster_clusterSshPassword')]"
-					},
-					"test_hdi_clusterPassword": {
-						"value": "[parameters('test_hdi_clusterPassword')]"
-					},
-					"test_hdi_clusterSshPassword": {
-						"value": "[parameters('test_hdi_clusterSshPassword')]"
 					},
 					"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls_covidreportdd2dl_properties_typeProperties_url')]"
@@ -115,12 +116,6 @@
 					},
 					"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
 						"value": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup')]"
-					},
-					"test_hdi_properties_typeProperties_hostSubscriptionId": {
-						"value": "[parameters('test_hdi_properties_typeProperties_hostSubscriptionId')]"
-					},
-					"test_hdi_properties_typeProperties_clusterResourceGroup": {
-						"value": "[parameters('test_hdi_properties_typeProperties_clusterResourceGroup')]"
 					}
 				}
 			},
@@ -139,6 +134,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"test_hdi_clusterPassword": {
+						"value": "[parameters('test_hdi_clusterPassword')]"
+					},
+					"test_hdi_clusterSshPassword": {
+						"value": "[parameters('test_hdi_clusterSshPassword')]"
+					},
+					"test_hdi_properties_typeProperties_hostSubscriptionId": {
+						"value": "[parameters('test_hdi_properties_typeProperties_hostSubscriptionId')]"
+					},
+					"test_hdi_properties_typeProperties_clusterResourceGroup": {
+						"value": "[parameters('test_hdi_properties_typeProperties_clusterResourceGroup')]"
 					},
 					"tr_ingest_population_data_properties_typeProperties_scope": {
 						"value": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]"

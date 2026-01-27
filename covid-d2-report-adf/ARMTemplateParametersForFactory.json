@@ -11,6 +11,9 @@
 		"ls_adls_covidreportdd2dl_accountKey": {
 			"value": ""
 		},
+		"ls_databricks_cluster_accessToken": {
+			"value": ""
+		},
 		"ls_hdi_covid_cluster_clusterPassword": {
 			"value": ""
 		},
