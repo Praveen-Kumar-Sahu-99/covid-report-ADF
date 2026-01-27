@@ -22,7 +22,7 @@
 					}
 				},
 				"linkedServiceName": {
-					"referenceName": "ls_hdi_covid_cluster",
+					"referenceName": "test_hdi",
 					"type": "LinkedServiceReference"
 				}
 			}
