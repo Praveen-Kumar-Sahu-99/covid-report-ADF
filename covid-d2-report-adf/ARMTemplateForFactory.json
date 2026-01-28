@@ -1976,7 +1976,7 @@
 						"          population,",
 						"          reported_date,",
 						"          hospital_occupancy_count = {Daily hospital occupancy_count},",
-						"          ICU_occupancy_count = {Daily ICU occupancy_count}",
+						"          icu_occupancy_count = {Daily ICU occupancy_count}",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> selectDailySink",
