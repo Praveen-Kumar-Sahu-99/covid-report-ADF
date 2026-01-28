@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "part-00000-15f91239-0fc2-453b-b784-1e71ea62139e-c000.csv",
 				"folderPath": "ecdc/hospital_admission_daily",
 				"fileSystem": "processed"
 			},
