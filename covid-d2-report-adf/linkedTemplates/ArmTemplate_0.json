@@ -19,13 +19,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'ls_databricks_cluster'"
 		},
-		"ls_hdi_covid_cluster_clusterPassword": {
+		"ls_sql_covid_db_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'clusterPassword' of 'ls_hdi_covid_cluster'"
-		},
-		"ls_hdi_covid_cluster_clusterSshPassword": {
-			"type": "secureString",
-			"metadata": "Secure string for 'clusterSshPassword' of 'ls_hdi_covid_cluster'"
+			"metadata": "Secure string for 'password' of 'ls_sql_covid_db'"
 		},
 		"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 			"type": "string",
@@ -35,13 +31,17 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseURL}"
 		},
-		"ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId": {
+		"ls_sql_covid_db_properties_typeProperties_server": {
 			"type": "string",
-			"defaultValue": "c779884c-8177-4bd2-8251-157a109c2430"
+			"defaultValue": "covid-d2-db.database.windows.net"
 		},
-		"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
+		"ls_sql_covid_db_properties_typeProperties_database": {
 			"type": "string",
-			"defaultValue": "covid-report-rg"
+			"defaultValue": "covid-db"
+		},
+		"ls_sql_covid_db_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "covidd2admin"
 		}
 	},
 	"variables": {
@@ -121,6 +121,28 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_sql_covid_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_sql_covid_db_properties_typeProperties_server')]",
+					"database": "[parameters('ls_sql_covid_db_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_sql_covid_db_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_sql_covid_db_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/credential1')]",
 			"type": "Microsoft.DataFactory/factories/credentials",
 			"apiVersion": "2018-06-01",
@@ -151,7 +173,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/covid/transform"
+							"notebookPath": "/covid/transform/transform_population_data"
 						},
 						"linkedServiceName": {
 							"referenceName": "ls_databricks_cluster",
@@ -703,48 +725,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls_covidreportdd2dl')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_hdi_covid_cluster')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "HDInsightOnDemand",
-				"typeProperties": {
-					"clusterType": "hadoop",
-					"clusterSize": 4,
-					"clusterNamePrefix": "",
-					"timeToLive": "00:15:00",
-					"version": "4.0",
-					"hostSubscriptionId": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId')]",
-					"clusterResourceGroup": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup')]",
-					"linkedServiceName": {
-						"referenceName": "ls_ablob_covidreportd2sa",
-						"type": "LinkedServiceReference"
-					},
-					"clusterPassword": {
-						"type": "SecureString",
-						"value": "[parameters('ls_hdi_covid_cluster_clusterPassword')]"
-					},
-					"clusterSshPassword": {
-						"type": "SecureString",
-						"value": "[parameters('ls_hdi_covid_cluster_clusterSshPassword')]"
-					},
-					"headNodeSize": "",
-					"dataNodeSize": "",
-					"zookeeperNodeSize": "",
-					"clusterResourceGroupAuthType": "UserAssignedManagedIdentity",
-					"credential": {
-						"referenceName": "credential1",
-						"type": "CredentialReference"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_covidreportd2sa')]",
-				"[concat(variables('factoryId'), '/credentials/credential1')]"
 			]
 		}
 	]

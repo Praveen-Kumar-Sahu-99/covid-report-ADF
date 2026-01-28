@@ -20,6 +20,9 @@
 		"ls_hdi_covid_cluster_clusterSshPassword": {
 			"value": ""
 		},
+		"ls_sql_covid_db_password": {
+			"value": ""
+		},
 		"test_hdi_clusterPassword": {
 			"value": ""
 		},
@@ -37,6 +40,15 @@
 		},
 		"ls_http_ecdc_data_death_cases_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseURL}"
+		},
+		"ls_sql_covid_db_properties_typeProperties_server": {
+			"value": "covid-d2-db.database.windows.net"
+		},
+		"ls_sql_covid_db_properties_typeProperties_database": {
+			"value": "covid-db"
+		},
+		"ls_sql_covid_db_properties_typeProperties_userName": {
+			"value": "covidd2admin"
 		},
 		"test_hdi_properties_typeProperties_hostSubscriptionId": {
 			"value": "c779884c-8177-4bd2-8251-157a109c2430"

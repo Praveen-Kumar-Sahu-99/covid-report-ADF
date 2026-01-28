@@ -27,6 +27,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'clusterSshPassword' of 'ls_hdi_covid_cluster'"
 		},
+		"ls_sql_covid_db_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_sql_covid_db'"
+		},
 		"test_hdi_clusterPassword": {
 			"type": "secureString",
 			"metadata": "Secure string for 'clusterPassword' of 'test_hdi'"
@@ -50,6 +54,18 @@
 		"ls_http_ecdc_data_death_cases_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseURL}"
+		},
+		"ls_sql_covid_db_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "covid-d2-db.database.windows.net"
+		},
+		"ls_sql_covid_db_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "covid-db"
+		},
+		"ls_sql_covid_db_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "covidd2admin"
 		},
 		"test_hdi_properties_typeProperties_hostSubscriptionId": {
 			"type": "string",
@@ -99,11 +115,8 @@
 					"ls_databricks_cluster_accessToken": {
 						"value": "[parameters('ls_databricks_cluster_accessToken')]"
 					},
-					"ls_hdi_covid_cluster_clusterPassword": {
-						"value": "[parameters('ls_hdi_covid_cluster_clusterPassword')]"
-					},
-					"ls_hdi_covid_cluster_clusterSshPassword": {
-						"value": "[parameters('ls_hdi_covid_cluster_clusterSshPassword')]"
+					"ls_sql_covid_db_password": {
+						"value": "[parameters('ls_sql_covid_db_password')]"
 					},
 					"ls_adls_covidreportdd2dl_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls_covidreportdd2dl_properties_typeProperties_url')]"
@@ -111,11 +124,14 @@
 					"ls_http_ecdc_data_death_cases_properties_typeProperties_url": {
 						"value": "[parameters('ls_http_ecdc_data_death_cases_properties_typeProperties_url')]"
 					},
-					"ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId": {
-						"value": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId')]"
+					"ls_sql_covid_db_properties_typeProperties_server": {
+						"value": "[parameters('ls_sql_covid_db_properties_typeProperties_server')]"
 					},
-					"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
-						"value": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup')]"
+					"ls_sql_covid_db_properties_typeProperties_database": {
+						"value": "[parameters('ls_sql_covid_db_properties_typeProperties_database')]"
+					},
+					"ls_sql_covid_db_properties_typeProperties_userName": {
+						"value": "[parameters('ls_sql_covid_db_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -135,11 +151,23 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"ls_hdi_covid_cluster_clusterPassword": {
+						"value": "[parameters('ls_hdi_covid_cluster_clusterPassword')]"
+					},
+					"ls_hdi_covid_cluster_clusterSshPassword": {
+						"value": "[parameters('ls_hdi_covid_cluster_clusterSshPassword')]"
+					},
 					"test_hdi_clusterPassword": {
 						"value": "[parameters('test_hdi_clusterPassword')]"
 					},
 					"test_hdi_clusterSshPassword": {
 						"value": "[parameters('test_hdi_clusterSshPassword')]"
+					},
+					"ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId": {
+						"value": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_hostSubscriptionId')]"
+					},
+					"ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup": {
+						"value": "[parameters('ls_hdi_covid_cluster_properties_typeProperties_clusterResourceGroup')]"
 					},
 					"test_hdi_properties_typeProperties_hostSubscriptionId": {
 						"value": "[parameters('test_hdi_properties_typeProperties_hostSubscriptionId')]"
