@@ -56,7 +56,7 @@
 		"test_hdi_properties_typeProperties_clusterResourceGroup": {
 			"value": "covid-report-rg"
 		},
-		"tr_ingest_population_data_properties_typeProperties_scope": {
+		"tr_population_data_arrives_properties_typeProperties_scope": {
 			"value": "/subscriptions/c779884c-8177-4bd2-8251-157a109c2430/resourceGroups/covid-report-rg/providers/Microsoft.Storage/storageAccounts/covidreportd2sa"
 		}
 	}
