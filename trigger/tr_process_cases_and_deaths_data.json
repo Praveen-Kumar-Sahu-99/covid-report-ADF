@@ -1,0 +1,17 @@
+{
+	"name": "tr_process_cases_and_deaths_data",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 24,
+				"startTime": "2026-01-29T23:00:00",
+				"timeZone": "Eastern Standard Time"
+			}
+		}
+	}
+}
