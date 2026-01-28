@@ -174,6 +174,26 @@
 					},
 					"test_hdi_properties_typeProperties_clusterResourceGroup": {
 						"value": "[parameters('test_hdi_properties_typeProperties_clusterResourceGroup')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'covid-d2-report-adf_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "covid-d2-report-adf_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tr_population_data_arrives_properties_typeProperties_scope": {
 						"value": "[parameters('tr_population_data_arrives_properties_typeProperties_scope')]"
@@ -181,7 +201,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'covid-d2-report-adf_ArmTemplate_0')]"
+				"[resourceId('Microsoft.Resources/deployments', 'covid-d2-report-adf_ArmTemplate_1')]"
 			]
 		}
 	]
